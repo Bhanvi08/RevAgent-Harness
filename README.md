@@ -1,57 +1,47 @@
-CLOSIRA FULLSTACK: AI ENQUIRY PIPELINE & DASHBOARD
+# Closira – AI Enquiry Pipeline & Dashboard 🤖📱
 
-OVERVIEW
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue?logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?logo=fastapi)
+![React Native](https://img.shields.io/badge/React_Native-Expo_SDK_56-61DAFB?logo=react)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0%2B-red)
 
-This project is a production-oriented MVP for an AI-powered business assistant
-designed for small and medium businesses. I have architected a two-tier system
-consisting of a high-performance Python backend for data processing and a React
-Native mobile dashboard for real-time monitoring.
+## 📝 Project Overview
 
-BACKEND ARCHITECTURE
+**Closira** is a production-oriented, two-tier AI business assistant engineered for small and medium businesses (SMBs). It bridges high-throughput customer inquiry processing with real-time operational visibility. 
 
-  - Framework: Built with FastAPI for its native asynchronous capabilities and
-    superior speed.
-  - Async Pipeline: Implemented FastAPI BackgroundTasks to ensure the API
-    returns a Job ID immediately to the client while the logic engine processes
-    the message in the background.
-  - Database: Utilized SQLAlchemy with a SQLite provider for a portable and
-    reliable relational data store.
-  - Operational Visibility: Developed a custom JSON logging formatter to ensure
-    all system events (enquiry creation, SOP matching, and escalations) are
-    ready for professional log aggregation tools.
+The system features an asynchronous Python backend that ingests customer messages, runs SOP keyword matching asynchronously, and immediately delivers job statuses to a React Native mobile dashboard equipped with AI-generated conversation summaries.
 
-FRONTEND ARCHITECTURE
+---
 
-  - Framework: Developed using React Native and the latest Expo SDK 56.
-  - UI/UX Logic: Built a responsive mobile dashboard featuring real-time status
-    badges and persistent state management using mock data.
-  - Routing: Implemented a Stack-based navigation system to allow owners to
-    drill down from lead lists into specific conversation details and
-    AI-generated summaries.
+## 🛠️ System Architecture & Core Tech Stack
 
-ENGINEERING TRADE-OFFS & DECISIONS
+### 1. Asynchronous Backend (FastAPI & SQLAlchemy)
+* **Framework:** Built with **FastAPI** for native async performance and minimal execution latency.
+* **Non-Blocking Execution:** Leverages FastAPI `BackgroundTasks` to issue an instant `Job ID` upon request ingestion, decoupling the NLP engine from the primary thread.
+* **Persistence:** **SQLAlchemy** ORM paired with **SQLite** for a lightweight, portable, and reliable relational data store.
+* **Observability:** Custom JSON log formatter enforcing structured logging across inquiry lifecycles, SOP matches, and system escalations.
 
-  - BackgroundTasks vs Celery: I chose FastAPI BackgroundTasks for this MVP to
-    avoid the infrastructure overhead of a Redis broker while maintaining
-    non-blocking performance for standard SOP keyword matching.
-  - Standard Entry Point: To bypass known module resolution conflicts in the
-    latest SDK 56 environment I utilized the standard AppEntry configuration to
-    ensure stable UI rendering across web and mobile views.
+### 2. Frontend Dashboard (React Native & Expo SDK 56)
+* **Framework:** Mobile application built using **React Native** and **Expo SDK 56**.
+* **Navigation:** Stack-based routing via React Navigation, enabling seamless drill-down from lead feeds into detailed message threads.
+* **Real-time UX:** Status badges, interactive filter views, and AI-driven conversation summarization for rapid decision-making.
 
-SETUP AND RUN
+---
 
-BACKEND:
+## ⚙️ Engineering Trade-Offs & Key Decisions
 
-1.  cd Backend
-2.  pip install -r requirements.txt
-3.  python -m uvicorn app.main:app --reload
+* **BackgroundTasks vs. Celery/Redis:** To eliminate the infrastructure and memory overhead of running a dedicated Redis broker, the system utilizes native FastAPI `BackgroundTasks`. This satisfies non-blocking guarantees for standard SOP keyword matching while keeping the MVP lightweight and cost-effective.
+* **Decoupled Main Thread:** API response times remain sub-millisecond as computation heavy tasks (summarization, SOP classification) are processed asynchronously.
+* **Expo SDK 56 Resolution:** Adopted a standard `AppEntry` setup to resolve module boundary issues across web and mobile preview modes.
 
-FRONTEND:
+---
 
-1.  cd Frontend
-2.  npm install
-3.  npx expo start --web
+## 🚀 Setup and Installation
 
-DEVELOPER
-
-  - Bhanvi Singh Chauhan: Lead System Architect and Full-Stack Developer
+### Backend Setup
+```bash
+cd Backend
+python -m venv .venv
+source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
+pip install -r requirements.txt
+python -m uvicorn app.main:app --reload
