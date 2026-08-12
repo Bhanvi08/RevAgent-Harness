@@ -45,3 +45,16 @@ python -m venv .venv
 source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
 pip install -r requirements.txt
 python -m uvicorn app.main:app --reload
+```
+
+### Frontend Setup
+```bash
+cd Frontend
+npm install
+npx expo start --web
+```
+
+### 👤 Author
+Bhanvi Singh Chauhan
+
+Lead System Architect & Full-Stack Developer
