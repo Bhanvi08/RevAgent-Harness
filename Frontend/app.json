@@ -20,9 +20,6 @@
       "favicon": "./assets/favicon.png",
       "output": "single"
     },
-    "plugins": [
-      "expo-router"
-    ],
     "experiments": {
       "typedRoutes": false,
       "reactCompiler": false

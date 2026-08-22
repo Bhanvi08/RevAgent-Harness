@@ -1,0 +1,30 @@
+export const MOCK_DATA = [
+  {
+    id: "demo_001",
+    customer: "Sarah M.",
+    channel: "whatsapp",
+    status: "escalated",
+    reason: "Pricing complaint",
+    summary: "Customer unhappy with quote, requested manager.",
+    receivedAt: new Date().toISOString(),
+    urgency: "high",
+  },
+  {
+    id: "demo_002",
+    customer: "Rajesh Kumar",
+    channel: "call",
+    status: "qualified",
+    summary: "Interested in premium plan. Scheduled demo.",
+    receivedAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+    urgency: "medium",
+  },
+  {
+    id: "demo_003",
+    customer: "John Doe",
+    channel: "email",
+    status: "new",
+    summary: "General enquiry about services.",
+    receivedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    urgency: "low",
+  },
+];
