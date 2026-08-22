@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import datetime
 
 # SQLite database file
-DATABASE_URL = "sqlite:///./closira.db"
+DATABASE_URL = "sqlite:///./revagent.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -18,6 +18,9 @@ class Enquiry(Base):
     status = Column(String, default="received")
     sop_match = Column(String, nullable=True)
     suggested_response = Column(String, nullable=True)
+    recommended_action = Column(String, nullable=True)
+    ai_confidence = Column(String, nullable=True)
+    payment_link = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     history = Column(JSON, default=[])
 

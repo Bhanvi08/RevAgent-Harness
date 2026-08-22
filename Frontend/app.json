@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "closira_frontend",
-    "slug": "closira_frontend",
+    "name": "RevAgent",
+    "slug": "revagent_frontend",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "closirafrontend",
+    "scheme": "revagentfrontend",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/images/icon.png"
