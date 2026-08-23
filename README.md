@@ -123,7 +123,7 @@ The `LIVE` indicator pulses when the interface is active. The frontend also expo
 ## Project structure
 
 ```
-CLOSIRA FULLSTACK/
+RevAgent/
 ├── Backend/
 │   ├── app/
 │   │   ├── main.py          # FastAPI routes and background workflow
