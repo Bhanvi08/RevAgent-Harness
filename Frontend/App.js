@@ -70,7 +70,7 @@ const C = {
 };
 
 const DESKTOP = 860;
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://revagent-harness.onrender.com";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
