@@ -6,6 +6,10 @@
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0%2B-red)
 ![Razorpay](https://img.shields.io/badge/Razorpay-Test_Mode_API-0d2481)
 
+**Live dashboard:** [Open RevAgent](https://revagent-harness-ui.netlify.app/)  
+**Backend API:** [API health](https://revagent-harness.onrender.com/health) · [Interactive API docs](https://revagent-harness.onrender.com/docs)  
+**Repository:** [Bhanvi08/RevAgent-Harness](https://github.com/Bhanvi08/RevAgent-Harness)
+
 ## From customer enquiry to revenue action
 
 RevAgent is an AI-powered revenue operations agent for small and medium-sized businesses. It turns unstructured customer enquiries into structured, traceable business actions.
@@ -66,9 +70,9 @@ RevAgent is designed to automate routine handling without pretending that every 
 
 ### Live operations dashboard
 
-The React Native and Expo frontend can run in browser or mobile-compatible Expo environments. In live mode, it loads records from the backend API, refreshes periodically, shows pipeline movement, highlights escalations, exposes AI context, and opens generated payment links directly from an enquiry.
+The React Native and Expo frontend runs in the browser and connects to the hosted backend API. It refreshes records periodically, shows pipeline movement, highlights escalations, exposes AI context, and opens generated payment links directly from an enquiry.
 
-If the backend is unavailable during local development, the frontend uses a clearly indicated demo-data fallback so the interface does not fail silently.
+If the backend is unavailable, the frontend uses a clearly indicated demo-data fallback so the interface does not fail silently. The dashboard also indicates whether it is connected to the live API or operating in demo mode.
 
 ## Architecture
 
@@ -89,7 +93,7 @@ If the backend is unavailable during local development, the frontend uses a clea
 | --- | --- | --- |
 | UI | React Native | Shared interface for phone and web |
 | Runtime | Expo SDK 56 | Local development and browser preview |
-| Navigation | React Navigation | Home, Leads, Alerts, and enquiry details |
+| Navigation | React Navigation | Overview, Pipeline, Alerts, and enquiry details |
 | Data connection | Fetch API | Loads live enquiries and sends operator actions |
 | UX | Responsive layouts, status states, animations | Makes pipeline health and next actions easy to understand |
 
@@ -97,15 +101,12 @@ If the backend is unavailable during local development, the frontend uses a clea
 
 The interface is intentionally compact and operational rather than a generic CRM template.
 
-- **Home** shows pipeline pulse, total leads, escalations, recent agent activity, and the current human-attention queue.
-
-- **Leads** provides search, status filters, channel context, urgency markers, summaries, and enquiry details.
-
+- **Overview** shows pipeline health, enquiry totals, recent activity, and the current human-attention queue.
+- **Pipeline** presents enquiries and their progress through the workflow.
 - **Alerts** provides an action-focused queue for escalated conversations.
+- **Enquiry details** show the original message, AI summary, classification, confidence, recommended action, suggested response, history, and payment link when available.
 
-- **Details** shows the original message, AI summary, classification, confidence, recommended action, suggested response, history, and payment link when available.
-
-The `LIVE` indicator pulses when the interface is active. The frontend also exposes whether it is connected to the backend or operating in demo fallback mode.
+The high-contrast dashboard uses a restrained monochrome palette with functional status accents. The `LIVE` indicator pulses when the interface is active. The frontend also exposes whether it is connected to the backend or operating in demo fallback mode.
 
 ## API surface
 
@@ -123,14 +124,14 @@ The `LIVE` indicator pulses when the interface is active. The frontend also expo
 ## Project structure
 
 ```
-RevAgent/
+RevAgent-Harness/
 ├── Backend/
 │   ├── app/
 │   │   ├── main.py          # FastAPI routes and background workflow
 │   │   ├── classifier.py    # Intent classifier and AI summary logic
 │   │   ├── database.py      # SQLAlchemy model and SQLite setup
 │   │   ├── payments.py      # Razorpay Payment Links integration
-│   │   ├── revagent.db     # Local SQLite database created at runtime
+│   │   ├── revagent.db      # Local SQLite database created at runtime
 │   │   └── .env             # Local Test Mode credentials; never commit
 │   └── requirements.txt
 └── Frontend/
@@ -157,7 +158,7 @@ python -m venv .venv
 
 On Windows PowerShell:
 
-```
+```powershell
 .venv\Scripts\Activate.ps1
 ```
 
@@ -170,12 +171,12 @@ source .venv/bin/activate
 Install the backend dependencies:
 
 ```bash
-python -m pip install fastapi "uvicorn[standard]" sqlalchemy scikit-learn razorpay python-dotenv
+python -m pip install -r requirements.txt
 ```
 
-Create `Backend/app/.env` with Razorpay **Test Mode** credentials:
+Create `Backend/app/.env` with Razorpay **Test Mode** credentials if you want to demonstrate payment-link generation:
 
-```
+```text
 RAZORPAY_KEY_ID=your_test_key_id
 RAZORPAY_KEY_SECRET=your_test_key_secret
 ```
@@ -187,7 +188,7 @@ cd app
 python -m uvicorn main:app --reload
 ```
 
-The API will be available at [`http://127.0.0.1:8000`](http://127.0.0.1:8000).
+The local API will be available at [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
 ### Frontend
 
@@ -195,38 +196,30 @@ Open a second terminal:
 
 ```bash
 cd Frontend
-npm install
-npx expo install @expo/vector-icons
+npm ci
 npm run web
 ```
 
-The frontend is configured to use:
+For local browser testing, keep the backend and frontend terminals running at the same time. The local frontend should use:
 
-```
+```js
 const API_BASE_URL = "http://127.0.0.1:8000";
 ```
 
-For local browser testing, keep the backend and frontend terminals running at the same time.
+The deployed dashboard uses the hosted backend API at `https://revagent-harness.onrender.com`.
 
 ## Live demo: one-minute path
 
-The clearest demonstration is an enquiry moving through the complete system:
+The clearest demonstration is an enquiry moving through the complete hosted system:
 
-1. Open [`http://127.0.0.1:8000/docs`](http://127.0.0.1:8000/docs).
+1. Open the [RevAgent dashboard](https://revagent-harness-ui.netlify.app/) and confirm it shows the live API connection.
+2. Open the [interactive API docs](https://revagent-harness.onrender.com/docs).
+3. Expand `POST /enquiry`, select **Try it out**, and enter values for `name`, `channel`, and `message`. For example, use `Bhanvi Demo`, `email`, and `I want to book a demo`.
+4. Select **Execute** and wait a few seconds for the background worker to classify the enquiry.
+5. Return to the dashboard and refresh if needed. Open the new enquiry and show its intent, confidence, recommended action, and history.
+6. Use the dashboard’s escalation or resolution action to show the human-in-the-loop workflow and updated status.
 
-1. Use `POST /enquiry` to create a pricing enquiry, such as: `I want to know the pricing for the premium plan`.
-
-1. Wait for the background worker to classify the message.
-
-1. Open `GET /enquiries` or the RevAgent Leads screen and show the real database record.
-
-1. Open the enquiry details and point out the AI classification, confidence, suggested response, and Razorpay payment link when generated.
-
-1. Use `POST /enquiry/{id}/escalate` or the Alerts screen to move the conversation into human review.
-
-1. Press **Take over** in the frontend.
-
-1. Show that the escalation count changes from `1` to `0` and the record becomes `resolved`.
+The hosted Render service may take a little time to respond after a period of inactivity.
 
 ### Suggested pitch narration
 
@@ -244,32 +237,28 @@ SQLite keeps the project portable and makes the demo reproducible with minimal i
 
 ### Live API with a demo fallback
 
-The frontend prefers real API data and refreshes periodically. If the local backend is unavailable, it uses demo records and visibly indicates demo mode. This makes the presentation resilient while keeping the live path honest.
+The frontend prefers real API data and refreshes periodically. If the backend is unavailable, it uses demo records and visibly indicates demo mode. This makes the presentation resilient while keeping the live path honest.
 
 ### Test Mode payment action
 
 Payment links are created only for the classifier’s `pricing` intent and use Razorpay Test Mode. In the current MVP, the classifier’s intent result is the primary gate for the payment-link attempt. A production version should add an explicit confidence threshold and a policy check before any money-facing action.
 
-### Development CORS
+### CORS configuration
 
-CORS is permissive for local browser development. Before deployment, `allow_origins=["*"]` should be replaced with the exact deployed frontend origin, and credentials/authentication policies should be configured explicitly.
+The backend currently allows cross-origin requests so the Netlify dashboard can communicate with the Render API. Before production use, CORS should be restricted to the deployed frontend origin, and authentication policies should be configured explicitly.
 
 ## Current limitations and next steps
 
-RevAgent is intentionally an MVP. The current version does not yet include authentication, role-based access, durable background jobs, production database migrations, webhook reconciliation for payment status, or a hosted deployment configuration. These are the next engineering steps for turning the demo into a production service.
+RevAgent is intentionally an MVP, with a hosted demo available at the links above. Further development can add authentication, role-based access, durable background jobs, production database migrations, webhook reconciliation for payment status, and stronger deployment configuration.
 
 The current API also accepts several values as query parameters for simplicity. A production API would use validated Pydantic request and response schemas, stricter error handling, rate limiting, and structured event identifiers.
 
 ## Security notes
 
 - Use Razorpay Test Mode credentials only during local development and demos.
-
 - Never commit `.env`, API keys, payment secrets, or generated private credentials.
-
-- Restrict CORS before deploying publicly.
-
+- Restrict CORS before production use.
 - Treat AI output as an assistive recommendation until it passes the product’s confidence and policy checks.
-
 - Do not use the current SQLite and in-process background worker setup as a production security or reliability boundary.
 
 ## Author
@@ -277,3 +266,5 @@ The current API also accepts several values as query parameters for simplicity. 
 **Bhanvi Singh Chauhan**  
 AI & Full-Stack Developer  
 [LinkedIn Profile](https://www.linkedin.com/in/bhanvi-singh-chauhan-2394472b4)
+
+I changed the demo walkthrough to use your **public dashboard and API docs**, and updated the setup/deployment details to match the live project. Once you paste and save it, we can push that README change to GitHub.
